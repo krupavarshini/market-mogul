@@ -11,6 +11,7 @@ from app.api.comments import router as comments_router
 from app.api.stocks import router as stocks_router
 from app.api.market import router as market_router
 from app.api.leaderboard import router as leaderboard_router
+import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,7 +21,12 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Market Mogul", lifespan=lifespan)
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+# Only mount static if directory exists
+static_dir = "app/static"
+if not os.path.exists(static_dir):
+    os.makedirs(static_dir, exist_ok=True)
+
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 app.include_router(auth_router)
 app.include_router(companies_router)
