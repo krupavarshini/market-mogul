@@ -16,5 +16,6 @@ class User(Base):
     cash_balance = Column(Float, default=100000.0)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    # Add this line:
     companies = relationship("Company", back_populates="owner")
+    comments = relationship("Comment", back_populates="user")
+    stock_portfolio = relationship("StockOwnership", back_populates="user")
