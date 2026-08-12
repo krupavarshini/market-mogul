@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Mogul</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#e94560">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #0d1117; color: #c9d1d9; font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #58a6ff; text-align: center; font-size: 28px; margin-bottom: 5px; }
+        h2 { color: #f0883e; font-size: 16px; margin-bottom: 10px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .subtitle { text-align: center; color: #8b949e; margin-bottom: 20px; font-size: 14px; }
+        .token-bar { background: #161b22; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 12px; word-break: break-all; border: 1px solid #30363d; }
+        .token-bar.active { color: #3fb950; border-color: #3fb950; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 15px; }
+        .card.full { grid-column: 1 / -1; }
+        input, select, textarea { width: 100%; padding: 8px; margin: 4px 0; background: #0d1117; color: white; border: 1px solid #30363d; border-radius: 4px; font-size: 13px; }
+        button { padding: 8px 15px; margin: 3px; background: #238636; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; }
+        button:hover { background: #2ea043; }
+        button.gold { background: #d2991d; }
+        button.gold:hover { background: #e0a82b; }
+        button.red { background: #da3633; }
+        button.red:hover { background: #f85149; }
+        pre { background: #0d1117; padding: 10px; border-radius: 4px; font-size: 11px; max-height: 150px; overflow-y: auto; margin-top: 8px; white-space: pre-wrap; }
+        .section-title { color: #58a6ff; font-size: 18px; margin: 20px 0 10px; grid-column: 1 / -1; border-bottom: 1px solid #30363d; padding-bottom: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏢 Market Mogul</h1>
+        <p class="subtitle">Business Empire Simulation Game</p>
+        
+        <div class="token-bar" id="tokenBar">🔴 Not Logged In</div>
+
+        <div class="grid">
+            <!-- ========== ACCOUNT ========== -->
+            <div class="section-title">👤 Account</div>
+            
+            <div class="card">
+                <h2>📝 Register</h2>
+                <input id="regUser" placeholder="Username">
+                <input id="regEmail" placeholder="Email">
+                <input id="regPass" placeholder="Password" type="password">
+                <button onclick="register()">Register</button>
+                <pre id="regResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>🔑 Login</h2>
+                <input id="loginEmail" placeholder="Email">
+                <input id="loginPass" placeholder="Password" type="password">
+                <button onclick="login()">Login</button>
+                <pre id="loginResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>🏆 Leaderboard</h2>
+                <button onclick="getLeaderboard()">View Top Players</button>
+                <pre id="leaderboardResult"></pre>
+            </div>
+
+            <!-- ========== COMPANY ========== -->
+            <div class="section-title">🏢 Company Management</div>
+
+            <div class="card">
+                <h2>Create Company</h2>
+                <input id="compName" placeholder="Company Name">
+                <input id="compTicker" placeholder="Ticker (4 letters)">
+                <select id="compSector">
+                    <option value="tech">Tech</option>
+                    <option value="food">Food</option>
+                    <option value="energy">Energy</option>
+                    <option value="finance">Finance</option>
+                </select>
+                <button onclick="createCompany()">Create ($50,000)</button>
+                <pre id="compResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>My Companies</h2>
+                <button onclick="getCompanies()">Refresh</button>
+                <pre id="myCompResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>📈 Make Company Public (IPO)</h2>
+                <input id="ipoCompanyId" placeholder="Company ID" type="number">
+                <input id="ipoShares" placeholder="Total Shares" type="number">
+                <input id="ipoPrice" placeholder="Initial Price ($)" type="number">
+                <button class="gold" onclick="doIPO()">Go Public!</button>
+                <pre id="ipoResult"></pre>
+            </div>
+
+            <!-- ========== PRODUCTS ========== -->
+            <div class="section-title">📦 Products & Production</div>
+
+            <div class="card">
+                <h2>Add Product</h2>
+                <input id="prodCompanyId" placeholder="Company ID" type="number">
+                <input id="prodName" placeholder="Product Name">
+                <input id="prodCost" placeholder="Production Cost ($)" type="number">
+                <input id="prodPrice" placeholder="Selling Price ($)" type="number">
+                <button onclick="addProduct()">Add Product</button>
+                <pre id="prodResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>🏭 Produce Goods</h2>
+                <input id="produceProductId" placeholder="Product ID" type="number">
+                <input id="produceQty" placeholder="Quantity" type="number">
+                <button onclick="produce()">Produce</button>
+                <pre id="produceResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>💰 Sell Products</h2>
+                <input id="sellProductId" placeholder="Product ID" type="number">
+                <input id="sellQty" placeholder="Quantity" type="number">
+                <button class="gold" onclick="sellProduct()">Sell Products</button>
+                <pre id="sellResult"></pre>
+            </div>
+
+            <!-- ========== MARKET ========== -->
+            <div class="section-title">🏪 Resource Market</div>
+
+            <div class="card">
+                <h2>Seed Resources (First Time)</h2>
+                <button onclick="seedResources()">Initialize Resources</button>
+                <pre id="seedResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>View Resources</h2>
+                <button onclick="viewResources()">Refresh Prices</button>
+                <pre id="resourcesResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>🛒 Buy Resources</h2>
+                <input id="buyCompanyId" placeholder="Company ID" type="number">
+                <input id="resourceName" placeholder="Resource (Silicon/Oil/Wheat/Steel/Corn/Solar Panels)">
+                <input id="resourceQty" placeholder="Quantity" type="number">
+                <button onclick="buyResource()">Buy</button>
+                <pre id="buyResult"></pre>
+            </div>
+
+            <!-- ========== STOCK MARKET ========== -->
+            <div class="section-title">💹 Stock Market</div>
+
+            <div class="card">
+                <h2>Place Order</h2>
+                <input id="tradeCompanyId" placeholder="Company ID" type="number">
+                <select id="tradeType">
+                    <option value="BUY">BUY</option>
+                    <option value="SELL">SELL</option>
+                </select>
+                <input id="tradeShares" placeholder="Shares" type="number">
+                <input id="tradePrice" placeholder="Price per Share ($)" type="number">
+                <button onclick="placeOrder()">Place Order</button>
+                <pre id="tradeResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>💼 My Portfolio</h2>
+                <button onclick="getPortfolio()">View Portfolio</button>
+                <pre id="portfolioResult"></pre>
+            </div>
+
+            <div class="card">
+                <h2>📰 World Events</h2>
+                <button class="red" onclick="generateEvent()">Generate Random Event</button>
+                <button onclick="getEvents()">View Events</button>
+                <pre id="eventsResult"></pre>
+            </div>
+
+            <!-- ========== SOCIAL ========== -->
+            <div class="section-title">💬 Comments</div>
+
+            <div class="card full">
+                <h2>Company Discussion</h2>
+                <input id="commentCompanyId" placeholder="Company ID" type="number" style="width:200px;display:inline;">
+                <textarea id="commentContent" placeholder="Write a comment..." rows="2"></textarea>
+                <button onclick="addComment()">Post</button>
+                <button onclick="loadComments()">Refresh</button>
+                <div id="commentsList" style="margin-top:10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var token = "";
+        var tokenBar = document.getElementById('tokenBar');
+
+        function updateTokenBar() {
+            if (token) {
+                tokenBar.textContent = '🟢 Logged In | Token: ' + token.substring(0, 40) + '...';
+                tokenBar.className = 'token-bar active';
+            } else {
+                tokenBar.textContent = '🔴 Not Logged In';
+                tokenBar.className = 'token-bar';
+            }
+        }
+
+        async function apiCall(method, url, body) {
+            var headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+            var options = { method: method, headers: headers };
+            if (body) options.body = JSON.stringify(body);
+            var r = await fetch(url, options);
+            return await r.json();
+        }
+
+        // Auth
+        async function register() {
+            var d = await apiCall('POST', '/auth/register', {
+                username: document.getElementById('regUser').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPass').value
+            });
+            document.getElementById('regResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function login() {
+            var d = await apiCall('POST', '/auth/login', {
+                email: document.getElementById('loginEmail').value,
+                password: document.getElementById('loginPass').value
+            });
+            document.getElementById('loginResult').textContent = JSON.stringify(d, null, 2);
+            if (d.access_token) { token = d.access_token; updateTokenBar(); alert("Logged in!"); }
+        }
+
+        // Company
+        async function createCompany() {
+            var d = await apiCall('POST', '/companies/create', {
+                name: document.getElementById('compName').value,
+                ticker: document.getElementById('compTicker').value,
+                sector: document.getElementById('compSector').value
+            });
+            document.getElementById('compResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function getCompanies() {
+            var d = await apiCall('GET', '/companies/my');
+            document.getElementById('myCompResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        // Products
+        async function addProduct() {
+            var cid = document.getElementById('prodCompanyId').value;
+            var d = await apiCall('POST', '/products/create?company_id=' + cid, {
+                name: document.getElementById('prodName').value,
+                production_cost: parseFloat(document.getElementById('prodCost').value),
+                selling_price: parseFloat(document.getElementById('prodPrice').value)
+            });
+            document.getElementById('prodResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function produce() {
+            var d = await apiCall('POST', '/products/produce', {
+                product_id: parseInt(document.getElementById('produceProductId').value),
+                quantity: parseInt(document.getElementById('produceQty').value)
+            });
+            document.getElementById('produceResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        // Market
+        async function seedResources() {
+            var d = await apiCall('POST', '/market/seed-resources');
+            document.getElementById('seedResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function viewResources() {
+            var d = await apiCall('GET', '/market/resources');
+            document.getElementById('resourcesResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function buyResource() {
+            var cid = document.getElementById('buyCompanyId').value;
+            var rn = document.getElementById('resourceName').value;
+            var qty = document.getElementById('resourceQty').value;
+            var d = await apiCall('POST', '/market/buy-resource?company_id=' + cid + '&resource_name=' + rn + '&quantity=' + qty);
+            document.getElementById('buyResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function sellProduct() {
+            var d = await apiCall('POST', '/market/sell-product', {
+                product_id: parseInt(document.getElementById('sellProductId').value),
+                quantity: parseInt(document.getElementById('sellQty').value)
+            });
+            document.getElementById('sellResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        // Stocks
+        async function doIPO() {
+            var d = await apiCall('POST', '/stocks/ipo', {
+                company_id: parseInt(document.getElementById('ipoCompanyId').value),
+                shares_to_issue: parseInt(document.getElementById('ipoShares').value),
+                initial_price: parseFloat(document.getElementById('ipoPrice').value)
+            });
+            document.getElementById('ipoResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function placeOrder() {
+            var d = await apiCall('POST', '/stocks/order', {
+                company_id: parseInt(document.getElementById('tradeCompanyId').value),
+                order_type: document.getElementById('tradeType').value,
+                shares: parseInt(document.getElementById('tradeShares').value),
+                price_per_share: parseFloat(document.getElementById('tradePrice').value)
+            });
+            document.getElementById('tradeResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function getPortfolio() {
+            var d = await apiCall('GET', '/stocks/portfolio');
+            document.getElementById('portfolioResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function generateEvent() {
+            var d = await apiCall('POST', '/stocks/events/generate');
+            document.getElementById('eventsResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        async function getEvents() {
+            var d = await apiCall('GET', '/stocks/events');
+            document.getElementById('eventsResult').textContent = JSON.stringify(d, null, 2);
+        }
+
+        // Comments
+        async function addComment() {
+            var cid = document.getElementById('commentCompanyId').value;
+            var d = await apiCall('POST', '/comments/company/' + cid, {
+                content: document.getElementById('commentContent').value
+            });
+            document.getElementById('commentContent').value = '';
+            loadComments();
+        }
+
+        async function loadComments() {
+            var cid = document.getElementById('commentCompanyId').value;
+            var d = await apiCall('GET', '/comments/company/' + cid);
+            var html = '';
+            if (Array.isArray(d)) {
+                d.forEach(function(c) {
+                    html += '<div style="background:#0d1117;padding:8px;margin:3px 0;border-radius:4px;border-left:3px solid #e94560;">';
+                    html += '<strong style="color:#58a6ff;">' + c.username + '</strong> ';
+                    html += '<small style="color:#8b949e;">' + new Date(c.created_at).toLocaleString() + '</small><br>';
+                    html += '<span>' + c.content + '</span></div>';
+                });
+            }
+            document.getElementById('commentsList').innerHTML = html;
+        }
+
+        // Leaderboard
+        async function getLeaderboard() {
+            var d = await apiCall('GET', '/leaderboard');
+            var html = '';
+            if (Array.isArray(d)) {
+                d.forEach(function(p) {
+                    var medal = p.rank == 1 ? '🥇' : p.rank == 2 ? '🥈' : p.rank == 3 ? '🥉' : '#' + p.rank;
+                    html += '<div style="padding:5px;border-bottom:1px solid #30363d;">';
+                    html += medal + ' <strong>' + p.username + '</strong> - $' + p.net_worth.toLocaleString();
+                    html += ' (' + p.companies_owned + ' companies)</div>';
+                });
+            }
+            document.getElementById('leaderboardResult').innerHTML = html;
+        }
+
+        updateTokenBar();
+    </script>
+</body>
+</html>
