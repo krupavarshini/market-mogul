@@ -64,3 +64,27 @@ async def get_comments(company_id: int, db: AsyncSession = Depends(get_db)):
         ))
     
     return comments
+
+@router.get("/all")
+async def get_all_comments(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Comment, User.username, Company.name, Company.ticker)
+        .join(User, Comment.user_id == User.id)
+        .join(Company, Comment.company_id == Company.id)
+        .order_by(desc(Comment.created_at))
+        .limit(100)
+    )
+    
+    comments = []
+    for comment, username, company_name, ticker in result:
+        comments.append({
+            "id": comment.id,
+            "username": username,
+            "company_name": company_name,
+            "company_ticker": ticker,
+            "company_id": comment.company_id,
+            "content": comment.content,
+            "created_at": str(comment.created_at)
+        })
+    
+    return comments
