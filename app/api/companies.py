@@ -1,4 +1,4 @@
-# app/routers/companies.py
+# app/api/companies.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -16,24 +16,19 @@ async def create_company(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    # Check if company name already exists
     result = await db.execute(select(Company).where(Company.name == company_data.name))
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Company name already taken")
     
-    # Check if ticker already exists
     result = await db.execute(select(Company).where(Company.ticker == company_data.ticker))
     if result.scalar_one_or_none():
         raise HTTPException(status_code=400, detail="Ticker already taken")
     
-    # Check if user has enough cash (costs $50,000 to start)
     if current_user.cash_balance < 50000:
         raise HTTPException(status_code=400, detail="Need $50,000 to start a company")
     
-    # Deduct money from player
     current_user.cash_balance -= 50000
     
-    # Create company
     new_company = Company(
         name=company_data.name,
         ticker=company_data.ticker.upper(),
@@ -57,3 +52,24 @@ async def get_my_companies(
         select(Company).where(Company.owner_id == current_user.id)
     )
     return result.scalars().all()
+
+@router.get("/all")
+async def get_all_companies(db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(Company).order_by(Company.share_price.desc())
+    )
+    companies = result.scalars().all()
+    
+    return [
+        {
+            "id": c.id,
+            "name": c.name,
+            "ticker": c.ticker,
+            "sector": c.sector,
+            "share_price": c.share_price,
+            "is_public": c.is_public,
+            "cash": c.cash,
+            "reputation": c.reputation
+        }
+        for c in companies
+    ]
