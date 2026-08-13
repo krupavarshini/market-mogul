@@ -5,56 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Market Mogul Pro</title>
     <style>
-        :root {
-            --bg: #000; --surface: #111; --border: #222;
-            --primary: #6c5ce7; --success: #00b894; --danger: #ff4757;
-            --gold: #f9ca24; --text: #fff; --dim: #888;
-        }
+        :root{--bg:#000;--surface:#111;--border:#222;--primary:#6c5ce7;--success:#00b894;--danger:#ff4757;--gold:#f9ca24;--text:#fff;--dim:#888}
         *{margin:0;padding:0;box-sizing:border-box}
         body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;height:100vh;overflow:hidden}
-        .app{height:100vh;display:flex;flex-direction:column;max-width:500px;margin:0 auto;border-left:1px solid var(--border);border-right:1px solid var(--border);position:relative}
-        .header{background:rgba(0,0,0,0.9);backdrop-filter:blur(20px);padding:15px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;border-bottom:1px solid var(--border)}
+        .app{height:100vh;display:flex;flex-direction:column;max-width:500px;margin:0 auto;border-left:1px solid var(--border);border-right:1px solid var(--border)}
+        .header{background:rgba(0,0,0,0.9);padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
         .logo{font-size:20px;font-weight:900;background:linear-gradient(135deg,#6c5ce7,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
         .ws-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
-        .ws-connected{background:var(--success);box-shadow:0 0 10px var(--success)}
+        .ws-connected{background:var(--success)}
         .ws-disconnected{background:var(--danger)}
         .content{flex:1;overflow-y:auto;padding:15px;padding-bottom:80px}
-        .page{animation:fadeIn 0.3s ease-out}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-        .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 16px;z-index:1000}
-        .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 10px;border-radius:10px;color:var(--dim);font-size:9px;font-weight:600;background:none;border:none;transition:all 0.3s}
+        .page{animation:fadeIn 0.3s}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
+        .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;background:rgba(0,0,0,0.95);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 16px;z-index:1000}
+        .nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 8px;border-radius:10px;color:var(--dim);font-size:9px;font-weight:600;background:none;border:none}
         .nav-item.active{color:var(--primary);background:rgba(108,92,231,0.15)}
         .nav-icon{font-size:20px}
-        .hero{text-align:center;padding:40px 10px;position:relative}
-        .hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:250px;height:250px;background:radial-gradient(circle,rgba(108,92,231,0.4),transparent);filter:blur(80px);z-index:-1}
-        .hero-title{font-size:42px;font-weight:900;letter-spacing:-2px;background:linear-gradient(135deg,#6c5ce7,#a855f7);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s linear infinite}
-        @keyframes shimmer{0%{background-position:0%}100%{background-position:200%}}
-        .btn{display:block;width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.3s;text-align:center;margin:8px 0}
-        .btn-primary{background:var(--primary);color:#fff;box-shadow:0 8px 30px rgba(108,92,231,0.4)}
-        .btn-primary:hover{transform:translateY(-2px)}
+        .hero{text-align:center;padding:40px 10px}
+        .hero-title{font-size:42px;font-weight:900;background:linear-gradient(135deg,#6c5ce7,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .btn{display:block;width:100%;padding:14px;border:none;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;margin:8px 0;text-align:center}
+        .btn-primary{background:var(--primary);color:#fff}
         .btn-glass{background:rgba(255,255,255,0.05);color:#fff;border:1px solid var(--border)}
         .btn-success{background:var(--success);color:#fff}
         .btn-gold{background:var(--gold);color:#000}
         .btn-danger{background:var(--danger);color:#fff}
-        .btn-sm{width:auto;display:inline-block;padding:8px 14px;font-size:11px}
         .input{width:100%;padding:14px;margin:6px 0;background:var(--surface);border:1px solid var(--border);border-radius:12px;color:#fff;font-size:15px}
-        .input:focus{outline:none;border-color:var(--primary)}
         .card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin:10px 0}
         .balance-badge{background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:16px;padding:20px;margin:15px 0}
         .balance-amount{font-size:36px;font-weight:900;display:block;margin-top:5px}
         .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-        .grid-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;cursor:pointer;transition:all 0.3s}
-        .grid-item:hover{border-color:var(--primary);transform:translateY(-2px)}
+        .grid-item{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;cursor:pointer}
         .grid-icon{font-size:30px;display:block;margin-bottom:8px}
         .ticker-bar{background:var(--surface);border-radius:12px;padding:12px;overflow:hidden;white-space:nowrap;margin:15px 0}
         .ticker-item{display:inline-block;margin-right:25px;font-weight:700;font-size:14px}
-        .green{color:var(--success)}.red{color:var(--danger)}
+        .green{color:var(--success)}
         .toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;width:90%;max-width:400px}
-        .toast{padding:14px;border-radius:12px;color:#fff;font-weight:600;text-align:center;margin:5px 0;animation:slideDown 0.4s ease-out}
+        .toast{padding:14px;border-radius:12px;color:#fff;font-weight:600;text-align:center;margin:5px 0;animation:slideDown 0.4s}
         .toast.success{background:var(--success)}.toast.error{background:var(--danger)}.toast.info{background:var(--primary)}
         @keyframes slideDown{from{transform:translateY(-30px);opacity:0}to{transform:translateY(0);opacity:1}}
         .confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998}
-        .confetti-piece{position:absolute;width:10px;height:10px;animation:fall 3s ease-out forwards}
+        .confetti-piece{position:absolute;width:10px;height:10px;animation:fall 3s forwards}
         @keyframes fall{0%{transform:translateY(-100vh) rotate(0)}100%{transform:translateY(110vh) rotate(720deg)}}
         .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
         .page-header h2{font-size:22px;font-weight:800}
@@ -62,482 +52,75 @@
         .company-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px;margin:10px 0}
         .company-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
         .company-id-badge{background:rgba(249,202,36,0.15);color:var(--gold);padding:4px 10px;border-radius:8px;font-weight:700;font-size:13px}
-        .product-row{background:rgba(0,0,0,0.3);padding:10px;border-radius:8px;margin:5px 0;display:flex;justify-content:space-between;align-items:center}
+        .product-row{background:rgba(0,0,0,0.3);padding:10px;border-radius:8px;margin:5px 0}
         .action-btns{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
-        .action-btns .btn{width:auto;padding:8px 12px;font-size:11px;margin:2px}
-        @media(max-width:400px){.hero-title{font-size:32px}.balance-amount{font-size:28px}}
+        .action-btns .btn{width:auto;padding:8px 12px;font-size:11px}
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="header">
-            <div class="logo">◆ Market Mogul</div>
-            <div><span class="ws-dot" id="wsDot"></span><small id="wsStatus">connecting...</small></div>
-        </div>
-        <div class="content" id="appContent"></div>
-        <nav class="bottom-nav" id="bottomNav">
-            <button class="nav-item active" onclick="nav('home')"><span class="nav-icon">🏠</span>Home</button>
-            <button class="nav-item" onclick="nav('market')"><span class="nav-icon">📊</span>Market</button>
-            <button class="nav-item" onclick="nav('trade')"><span class="nav-icon">💹</span>Trade</button>
-            <button class="nav-item" onclick="nav('companies')"><span class="nav-icon">🏢</span>Mine</button>
-            <button class="nav-item" onclick="nav('social')"><span class="nav-icon">💬</span>Chat</button>
-            <button class="nav-item" onclick="nav('profile')"><span class="nav-icon">👤</span>Profile</button>
-        </nav>
-    </div>
-    <div class="toast-container" id="toastContainer"></div>
-
-    <script>
-        var token = localStorage.getItem('mm_token') || '';
-        var ws = null;
-        var currentPage = 'home';
-        var livePrices = [];
-        var navPages = ['home','market','trade','companies','social','profile'];
-
-        function connectWS() {
-            var protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
-            ws = new WebSocket(protocol + '//' + location.host + '/ws');
-            ws.onopen = function() {
-                document.getElementById('wsDot').className = 'ws-dot ws-connected';
-                document.getElementById('wsStatus').textContent = 'Live';
-                document.getElementById('wsStatus').style.color = '#00b894';
-                setInterval(function() { try { ws.send(JSON.stringify({type:'ping'})); } catch(e) {} }, 25000);
-            };
-            ws.onmessage = function(e) {
-                var msg = JSON.parse(e.data);
-                if (msg.type === 'prices') {
-                    livePrices = msg.data;
-                    if (currentPage === 'market') updateMarketPrices();
-                    if (currentPage === 'home') updateTicker();
-                }
-            };
-            ws.onclose = function() {
-                document.getElementById('wsDot').className = 'ws-dot ws-disconnected';
-                document.getElementById('wsStatus').textContent = 'Reconnecting...';
-                document.getElementById('wsStatus').style.color = '#ff4757';
-                setTimeout(connectWS, 3000);
-            };
-        }
-
-        function toast(msg, type) {
-            var c = document.getElementById('toastContainer');
-            var t = document.createElement('div');
-            t.className = 'toast ' + (type||'info');
-            t.textContent = msg;
-            c.appendChild(t);
-            setTimeout(function() { t.remove(); }, 3000);
-        }
-
-        function confetti() {
-            var con = document.createElement('div');
-            con.className = 'confetti';
-            var colors = ['#6c5ce7','#00b894','#f9ca24','#ff4757','#a855f7'];
-            for(var i=0;i<60;i++) {
-                var p = document.createElement('div');
-                p.className = 'confetti-piece';
-                p.style.left = Math.random()*100+'%';
-                p.style.background = colors[Math.floor(Math.random()*colors.length)];
-                p.style.animationDelay = Math.random()*0.5+'s';
-                p.style.animationDuration = (2+Math.random()*3)+'s';
-                con.appendChild(p);
-            }
-            document.body.appendChild(con);
-            setTimeout(function(){con.remove()},3500);
-        }
-
-        async function api(method, url, body) {
-            var h = {'Content-Type':'application/json'};
-            if(token) h['Authorization'] = 'Bearer '+token;
-            var opts = {method:method, headers:h};
-            if(body) opts.body = JSON.stringify(body);
-            var r = await fetch(url, opts);
-            var d = await r.json();
-            return {ok:r.ok, data:d};
-        }
-
-        function nav(page) {
-            currentPage = page;
-            document.querySelectorAll('.nav-item').forEach(function(el,i) {
-                el.classList.toggle('active', navPages[i] === page);
-            });
-            renderPage(page);
-            document.querySelector('.content').scrollTop = 0;
-        }
-
-        function renderPage(page) {
-            var c = document.getElementById('appContent');
-            if(!token && page !== 'landing') { page = 'landing'; currentPage = 'home'; }
-            var pages = {
-                'landing': landingHTML, 'home': homeHTML, 'market': marketHTML,
-                'trade': tradeHTML, 'companies': companiesHTML, 'social': socialHTML, 'profile': profileHTML
-            };
-            c.innerHTML = (pages[page] || landingHTML)();
-            if(page==='home') loadTicker();
-            if(page==='market') loadMarket();
-            if(page==='companies' && token) loadMyCompanies();
-            if(page==='social') loadComments();
-            if(page==='profile' && token) loadProfile();
-        }
-                function landingHTML() {
-            return `<div class="page"><div class="hero"><div class="hero-glow"></div>
-            <h1 class="hero-title">Market<br>Mogul</h1>
-            <p style="color:#888;margin:15px 0">Build Your Empire. Trade Like a Pro.</p>
-            <button class="btn btn-primary" onclick="showRegister()">🚀 Create Account</button>
-            <button class="btn btn-glass" onclick="showLogin()">🔑 Sign In</button>
-            <div style="display:flex;justify-content:center;gap:30px;margin-top:30px;color:#888;font-size:13px">
-            <div><strong style="color:#fff;font-size:22px">∞</strong><br>Companies</div>
-            <div><strong style="color:#fff;font-size:22px">$0</strong><br>Fees</div>
-            <div><strong style="color:#fff;font-size:22px">24/7</strong><br>Trading</div></div></div></div>`;
-        }
-
-        function showRegister() {
-            var c = document.getElementById('appContent');
-            c.innerHTML = `<div class="page" style="padding-top:30px"><div class="card">
-            <div style="text-align:center;font-size:40px;margin-bottom:15px">🚀</div>
-            <h2 style="text-align:center">Create Account</h2>
-            <p style="text-align:center;color:#888;margin:10px 0 20px">Start with $100,000 virtual cash</p>
-            <input class="input" id="regUser" placeholder="Username">
-            <input class="input" id="regEmail" placeholder="Email" type="email">
-            <input class="input" id="regPass" placeholder="Password" type="password">
-            <button class="btn btn-primary" onclick="doRegister()">Create Free Account</button>
-            <p style="text-align:center;margin-top:15px;color:#888;font-size:13px">Have an account? <a style="color:#6c5ce7;cursor:pointer" onclick="showLogin()">Sign In</a></p></div></div>`;
-        }
-
-        function showLogin() {
-            var c = document.getElementById('appContent');
-            c.innerHTML = `<div class="page" style="padding-top:30px"><div class="card">
-            <div style="text-align:center;font-size:40px;margin-bottom:15px">🔑</div>
-            <h2 style="text-align:center">Welcome Back</h2>
-            <p style="text-align:center;color:#888;margin:10px 0 20px">Sign in to your empire</p>
-            <input class="input" id="loginEmail" placeholder="Email" type="email">
-            <input class="input" id="loginPass" placeholder="Password" type="password">
-            <button class="btn btn-primary" onclick="doLogin()">Sign In</button>
-            <p style="text-align:center;margin-top:15px;color:#888;font-size:13px">New player? <a style="color:#6c5ce7;cursor:pointer" onclick="showRegister()">Create Account</a></p></div></div>`;
-        }
-
-        async function doRegister() {
-            var r = await api('POST','/auth/register',{
-                username:document.getElementById('regUser').value,
-                email:document.getElementById('regEmail').value,
-                password:document.getElementById('regPass').value
-            });
-            if(r.ok){toast('Account created! 🎉','success');confetti();showLogin()}
-            else toast(r.data.detail||'Error','error');
-        }
-
-        async function doLogin() {
-            var r = await api('POST','/auth/login',{
-                email:document.getElementById('loginEmail').value,
-                password:document.getElementById('loginPass').value
-            });
-            if(r.ok&&r.data.access_token){
-                token=r.data.access_token;
-                localStorage.setItem('mm_token',token);
-                toast('Welcome! 🎮','success');
-                confetti();
-                connectWS();
-                nav('home');
-            }else toast('Invalid credentials','error');
-        }
-
-        function homeHTML() {
-            return `<div class="page">
-            <div class="balance-badge"><small style="color:#888">AVAILABLE BALANCE</small>
-            <span class="balance-amount">$100,000</span></div>
-            <div class="grid2">
-            <div class="grid-item" onclick="nav('market')"><span class="grid-icon">📊</span>Market</div>
-            <div class="grid-item" onclick="nav('trade')"><span class="grid-icon">💹</span>Trade</div>
-            <div class="grid-item" onclick="nav('companies')"><span class="grid-icon">🏢</span>My Companies</div>
-            <div class="grid-item" onclick="nav('social')"><span class="grid-icon">💬</span>Chat</div></div>
-            <div class="ticker-bar" id="homeTicker"><span style="color:#888">📈 Loading live prices...</span></div>
-            <button class="btn btn-gold" onclick="dailyReward()">🎁 Claim Daily Bonus</button></div>`;
-        }
-
-        function showCreateCompany() {
-            var c = document.getElementById('appContent');
-            c.innerHTML = `<div class="page"><div class="card">
-            <h2 style="margin-bottom:15px">🏢 Create Company</h2>
-            <input class="input" id="compName" placeholder="Company Name">
-            <input class="input" id="compTicker" placeholder="Ticker (4 letters)" maxlength="5">
-            <select class="input" id="compSector"><option value="tech">💻 Tech</option><option value="food">🍔 Food</option><option value="energy">⚡ Energy</option><option value="finance">💰 Finance</option></select>
-            <button class="btn btn-primary" onclick="createCompany()">Create ($50,000)</button>
-            <button class="btn btn-glass" onclick="nav('companies')">← Back</button></div></div>`;
-        }
-
-        async function createCompany() {
-            var r = await api('POST','/companies/create',{
-                name:document.getElementById('compName').value,
-                ticker:document.getElementById('compTicker').value,
-                sector:document.getElementById('compSector').value
-            });
-            if(r.ok){toast('Company created! 🏢','success');confetti();nav('companies')}
-            else toast(r.data.detail||'Error','error');
-        }
-
-        async function dailyReward() {
-            var r = await api('POST','/rewards/daily-login');
-            if(r.ok){toast(r.data.message,'success');confetti()}
-            else toast('Already claimed or login first','error');
-        }
-
-        function updateTicker() {
-            var el = document.getElementById('homeTicker');
-            if(!el || !livePrices.length) return;
-            el.innerHTML = livePrices.map(function(p) {
-                return '<span class="ticker-item"><strong>'+p.ticker+'</strong> <span class="green">▲ $'+p.price+'</span></span>';
-            }).join('');
-        }
-
-        function marketHTML() {
-            return `<div class="page"><div class="page-header"><h2>📊 Live Market</h2></div>
-            <div id="marketPrices"><span style="color:#888">Loading live prices...</span></div></div>`;
-        }
-
-        function updateMarketPrices() {
-            var el = document.getElementById('marketPrices');
-            if(!el) return;
-            el.innerHTML = livePrices.map(function(p) {
-                return '<div class="card" style="display:flex;justify-content:space-between;align-items:center"><div><strong>'+p.ticker+'</strong><br><small style="color:#888">'+p.name+' (ID: #'+p.id+')</small></div><div style="font-size:20px;font-weight:700;color:#00b894">$'+p.price+'</div></div>';
-            }).join('') || '<span style="color:#888">No public companies yet</span>';
-        }
-
-        function loadMarket() { updateMarketPrices(); }
-        function loadTicker() { updateTicker(); }
-
-        function tradeHTML() {
-            return `<div class="page"><div class="page-header"><h2>💹 Trade</h2></div>
-            <div class="card"><input class="input" id="tradeCompId" placeholder="Company ID" type="number">
-            <select class="input" id="tradeType"><option value="BUY">🟢 BUY</option><option value="SELL">🔴 SELL</option></select>
-            <input class="input" id="tradeShares" placeholder="Shares" type="number">
-            <input class="input" id="tradePrice" placeholder="Price per share ($)" type="number">
-            <button class="btn btn-primary" onclick="placeTrade()">Submit Order</button></div>
-            <button class="btn btn-gold" onclick="showIPO()">🚀 Launch IPO</button></div>`;
-        }
-
-        async function placeTrade() {
-            var r = await api('POST','/stocks/order',{
-                company_id:parseInt(document.getElementById('tradeCompId').value),
-                order_type:document.getElementById('tradeType').value,
-                shares:parseInt(document.getElementById('tradeShares').value),
-                price_per_share:parseFloat(document.getElementById('tradePrice').value)
-            });
-            if(r.ok){toast('Order placed! 📊','success');confetti()}
-            else toast(r.data.detail||'Error','error');
-        }
-
-        function showIPO() {
-            var c = document.getElementById('appContent');
-            c.innerHTML = `<div class="page"><div class="card"><h2>🚀 Launch IPO</h2>
-            <input class="input" id="ipoCompId" placeholder="Company ID" type="number">
-            <input class="input" id="ipoShares" placeholder="Total Shares" type="number">
-            <input class="input" id="ipoPrice" placeholder="Initial Price ($)" type="number">
-            <button class="btn btn-gold" onclick="doIPO()">Go Public!</button>
-            <button class="btn btn-glass" onclick="nav('trade')">← Back</button></div></div>`;
-        }
-
-        async function doIPO() {
-            var r = await api('POST','/stocks/ipo',{
-                company_id:parseInt(document.getElementById('ipoCompId').value),
-                shares_to_issue:parseInt(document.getElementById('ipoShares').value),
-                initial_price:parseFloat(document.getElementById('ipoPrice').value)
-            });
-            if(r.ok){toast('Company is public! 🚀','success');confetti();confetti()}
-            else toast(r.data.detail||'Error','error');
-        }
-
-        function companiesHTML() {
-            return `<div class="page">
-                <div class="page-header"><h2>🏢 My Companies</h2>
-                <button class="btn btn-primary btn-sm" onclick="showCreateCompany()">+ New</button></div>
-                <div id="myCompaniesList"><span style="color:#888">Loading...</span></div></div>`;
-        }
-
-        async function loadMyCompanies() {
-            var r = await api('GET', '/companies/my');
-            var el = document.getElementById('myCompaniesList');
-            if (r.ok && r.data.length > 0) {
-                var html = '';
-                for (var i = 0; i < r.data.length; i++) {
-                    var c = r.data[i];
-                    var pr = await api('GET', '/products/company/' + c.id);
-                    var products = pr.ok ? pr.data : [];
-                    html += `<div class="company-card">
-                        <div class="company-header">
-                            <div><strong style="font-size:18px">${c.name}</strong> <span style="color:#6c5ce7">${c.ticker}</span></div>
-                            <span class="company-id-badge">ID: #${c.id}</span>
-                        </div>
-                        <div style="display:flex;gap:15px;font-size:12px;color:#888;margin:8px 0">
-                            <span>💼 ${c.sector}</span>
-                            <span>💰 $${c.cash.toLocaleString()}</span>
-                            <span>${c.is_public ? '📈 Public' : '🔒 Private'}</span>
-                        </div>
-                        ${products.length > 0 ? '<small style="color:#888">PRODUCTS:</small>' + products.map(function(p) {
-                            return `<div class="product-row"><div><strong>${p.name}</strong> <small style="color:#888">#${p.id}</small><br><small style="color:#888">Qty: ${p.quantity} | Cost: $${p.production_cost} | Price: $${p.selling_price}</small></div></div>`;
-                        }).join('') : '<p style="color:#888;font-size:12px;margin:8px 0">No products yet</p>'}
-                        <div class="action-btns">
-                            <button class="btn btn-primary" onclick="showAddProduct(${c.id}, '${c.name}')">📦 Add</button>
-                            <button class="btn btn-success" onclick="showProduce(${c.id}, '${c.name}')">🏭 Produce</button>
-                            <button class="btn btn-gold" onclick="showSell(${c.id}, '${c.name}')">💰 Sell</button>
-                            ${!c.is_public ? `<button class="btn" style="background:#a855f7;color:#fff" onclick="showIPOForm(${c.id}, '${c.name}')">🚀 IPO</button>` : ''}
-                        </div></div>`;
-                }
-                el.innerHTML = html;
-            } else if (r.ok) {
-                el.innerHTML = '<div class="card" style="text-align:center;padding:40px"><span style="font-size:50px">🏢</span><p style="color:#888;margin:15px 0">No companies yet</p><button class="btn btn-primary" onclick="showCreateCompany()">Create Your First Company</button></div>';
-            } else {
-                el.innerHTML = '<div class="card"><p style="color:#ff4757">Please login first</p></div>';
-            }
-        }
-
-        function showAddProduct(companyId, companyName) {
-            var c = document.getElementById('appContent');
-            c.innerHTML = `<div class="page"><div class="card"><h2>📦 Add Product</h2>
-            <p style="color:#888;margin-bottom:10px">Company: <strong style="color:#fff">${companyName} (ID: #${companyId})</strong></p>
-            <input class="input" id="prodName" placeholder="Product Name">
-            <input class="input" id="prodCost" placeholder="Production Cost ($)" type="number">
-            <input class="input" id="prodPrice" placeholder="Selling Price ($)" type="number">
-            <button class="btn btn-primary" onclick="addProduct(${companyId})">Add Product</button>
-            <button class="btn btn-glass" onclick="nav('companies')">← Back</button></div></div>`;
-        }
-
-        async function addProduct(companyId) {
-            var r = await api('POST', '/products/create?company_id=' + companyId, {
-                name: document.getElementById('prodName').value,
-                production_cost: parseFloat(document.getElementById('prodCost').value),
-                selling_price: parseFloat(document.getElementById('prodPrice').value)
-            });
-            if (r.ok) { toast('Product added! 📦', 'success'); confetti(); nav('companies'); }
-            else toast(r.data.detail || 'Error', 'error');
-        }
-
-        function showProduce(companyId, companyName) {
-            var c = document.getElementById('appContent');
-            c.innerHTML = `<div class="page"><div class="card"><h2>🏭 Produce</h2>
-            <p style="color:#888;margin-bottom:10px">Company: <strong style="color:#fff">${companyName} (ID: #${companyId})</strong></p>
-            <input class="input" id="prodId" placeholder="Product ID" type="number">
-            <input class="input" id="prodQty" placeholder="Quantity" type="number">
-            <button class="btn btn-success" onclick="produce()">Produce</button>
-            <button class="btn btn-glass" onclick="nav('companies')">← Back</button></div></div>`;
-        }
-
-        async function produce() {
-            var r = await api('POST', '/products/produce', {
-                product_id: parseInt(document.getElementById('prodId').value),
-                quantity: parseInt(document.getElementById('prodQty').value)
-            });
-            if (r.ok) { toast('Production complete! 🏭', 'success'); confetti(); nav('companies'); }
-            else toast(r.data.detail || 'Error', 'error');
-        }
-
-        function showSell(companyId, companyName) {
-            var c = document.getElementById('appContent');
-            c.innerHTML = `<div class="page"><div class="card"><h2>💰 Sell Products</h2>
-            <p style="color:#888;margin-bottom:10px">Company: <strong style="color:#fff">${companyName} (ID: #${companyId})</strong></p>
-            <input class="input" id="sellProdId" placeholder="Product ID" type="number">
-            <input class="input" id="sellQty" placeholder="Quantity" type="number">
-            <button class="btn btn-gold" onclick="sellProduct()">Sell Now</button>
-            <button class="btn btn-glass" onclick="nav('companies')">← Back</button></div></div>`;
-        }
-
-        async function sellProduct() {
-            var r = await api('POST', '/market/sell-product', {
-                product_id: parseInt(document.getElementById('sellProdId').value),
-                quantity: parseInt(document.getElementById('sellQty').value)
-            });
-            if (r.ok) { toast('Sold! 💰', 'success'); confetti(); nav('companies'); }
-            else toast(r.data.detail || 'Error', 'error');
-        }
-
-        function showIPOForm(companyId, companyName) {
-            var c = document.getElementById('appContent');
-            c.innerHTML = `<div class="page"><div class="card"><h2>🚀 Launch IPO</h2>
-            <p style="color:#888;margin-bottom:10px">Company: <strong style="color:#fff">${companyName} (ID: #${companyId})</strong></p>
-            <input class="input" id="ipoShares" placeholder="Total Shares" type="number">
-            <input class="input" id="ipoPrice" placeholder="Initial Price ($)" type="number">
-            <button class="btn btn-gold" onclick="doIPOFromCompany(${companyId})">Go Public!</button>
-            <button class="btn btn-glass" onclick="nav('companies')">← Back</button></div></div>`;
-        }
-
-        async function doIPOFromCompany(companyId) {
-            var r = await api('POST', '/stocks/ipo', {
-                company_id: companyId,
-                shares_to_issue: parseInt(document.getElementById('ipoShares').value),
-                initial_price: parseFloat(document.getElementById('ipoPrice').value)
-            });
-            if (r.ok) { toast('Company is public! 🚀', 'success'); confetti(); nav('companies'); }
-            else toast(r.data.detail || 'Error', 'error');
-        }
-
-        function socialHTML() {
-            return `<div class="page"><div class="page-header"><h2>💬 Chat</h2></div>
-            <input class="input" id="chatCompId" placeholder="Company ID" type="number">
-            <textarea class="input" id="chatMsg" placeholder="Write a comment..." rows="2"></textarea>
-            <button class="btn btn-primary" onclick="postComment()">Post</button>
-            <div id="commentsList" style="margin-top:15px"></div></div>`;
-        }
-
-        async function postComment() {
-            var cid = document.getElementById('chatCompId').value;
-            var r = await api('POST','/comments/company/'+cid,{content:document.getElementById('chatMsg').value});
-            if(r.ok){document.getElementById('chatMsg').value='';loadComments();toast('Posted! 💬','success')}
-            else toast(r.data.detail||'Error','error');
-        }
-
-        async function loadComments() {
-            var cid = document.getElementById('chatCompId') ? document.getElementById('chatCompId').value : '1';
-            var r = await api('GET','/comments/company/'+cid);
-            var el = document.getElementById('commentsList');
-            if(el && Array.isArray(r.data)) {
-                el.innerHTML = r.data.map(function(c) {
-                    return '<div class="comment-item"><strong style="color:#6c5ce7">'+c.username+'</strong><br>'+c.content+'</div>';
-                }).join('');
-            }
-        }
-
-        function profileHTML() {
-            return `<div class="page"><div class="page-header"><h2>👤 Profile</h2></div>
-            <div class="card"><p>Balance: <strong style="color:#00b894">$100,000</strong></p></div>
-            <button class="btn btn-primary" onclick="getPortfolio()">💼 View Portfolio</button>
-            <div id="portfolioData" style="margin-top:10px"></div>
-            <button class="btn btn-glass" onclick="getLeaderboard()" style="margin-top:10px">🏆 Leaderboard</button>
-            <div id="lbData" style="margin-top:10px"></div>
-            <button class="btn btn-danger" style="margin-top:20px" onclick="logout()">🚪 Logout</button></div>`;
-        }
-
-        function loadProfile() {}
-
-        async function getPortfolio() {
-            var r = await api('GET','/stocks/portfolio');
-            var el = document.getElementById('portfolioData');
-            if(r.ok && Array.isArray(r.data)) {
-                el.innerHTML = r.data.map(function(p){return '<div class="card">'+p.ticker+' - '+p.shares_owned+' shares @ $'+p.current_price+'</div>';}).join('');
-            }
-        }
-
-        async function getLeaderboard() {
-            var r = await api('GET','/leaderboard');
-            var el = document.getElementById('lbData');
-            if(r.ok && Array.isArray(r.data)) {
-                el.innerHTML = r.data.slice(0,5).map(function(p,i){
-                    var m = i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
-                    return '<div class="card" style="display:flex;gap:10px;align-items:center"><span style="font-size:24px">'+m+'</span><div><strong>'+p.username+'</strong><br><small style="color:#888">$'+p.net_worth.toLocaleString()+'</small></div></div>';
-                }).join('');
-            }
-        }
-
-        function logout() {
-            token = '';
-            localStorage.removeItem('mm_token');
-            if(ws) ws.close();
-            nav('landing');
-            toast('Logged out','info');
-        }
-
-        if(token) {
-            connectWS();
-            nav('home');
-        } else {
-            nav('landing');
-        }
-    </script>
+<div class="app">
+<div class="header"><div class="logo">Market Mogul</div><div><span class="ws-dot" id="wsDot"></span><small id="wsStatus">connecting...</small></div></div>
+<div class="content" id="appContent"></div>
+<nav class="bottom-nav" id="bottomNav">
+<button class="nav-item active" onclick="nav('home')"><span class="nav-icon">🏠</span>Home</button>
+<button class="nav-item" onclick="nav('market')"><span class="nav-icon">📊</span>Market</button>
+<button class="nav-item" onclick="nav('trade')"><span class="nav-icon">💹</span>Trade</button>
+<button class="nav-item" onclick="nav('companies')"><span class="nav-icon">🏢</span>Mine</button>
+<button class="nav-item" onclick="nav('allcompanies')"><span class="nav-icon">🌐</span>All</button>
+<button class="nav-item" onclick="nav('social')"><span class="nav-icon">💬</span>Chat</button>
+<button class="nav-item" onclick="nav('profile')"><span class="nav-icon">👤</span>Profile</button>
+</nav>
+</div>
+<div class="toast-container" id="toastContainer"></div>
+<script>
+var token=localStorage.getItem('mm_token')||'';
+var ws=null;
+var currentPage='home';
+var livePrices=[];
+var navPages=['home','market','trade','companies','allcompanies','social','profile'];
+function connectWS(){var p=location.protocol==='https:'?'wss:':'ws:';ws=new WebSocket(p+'//'+location.host+'/ws');ws.onopen=function(){document.getElementById('wsDot').className='ws-dot ws-connected';document.getElementById('wsStatus').textContent='Live';document.getElementById('wsStatus').style.color='#00b894'};ws.onmessage=function(e){var m=JSON.parse(e.data);if(m.type==='prices'){livePrices=m.data;if(currentPage==='market')updateMarketPrices();if(currentPage==='home')updateTicker()}};ws.onclose=function(){document.getElementById('wsDot').className='ws-dot ws-disconnected';document.getElementById('wsStatus').textContent='Reconnecting...';setTimeout(connectWS,3000)}}
+function toast(m,t){var c=document.getElementById('toastContainer');var d=document.createElement('div');d.className='toast '+(t||'info');d.textContent=m;c.appendChild(d);setTimeout(function(){d.remove()},3000)}
+function confetti(){var con=document.createElement('div');con.className='confetti';var colors=['#6c5ce7','#00b894','#f9ca24','#ff4757','#a855f7'];for(var i=0;i<60;i++){var p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'%';p.style.background=colors[Math.floor(Math.random()*colors.length)];p.style.animationDelay=Math.random()*0.5+'s';con.appendChild(p)}document.body.appendChild(con);setTimeout(function(){con.remove()},3500)}
+async function api(m,u,b){var h={'Content-Type':'application/json'};if(token)h['Authorization']='Bearer '+token;var o={method:m,headers:h};if(b)o.body=JSON.stringify(b);var r=await fetch(u,o);var d=await r.json();return{ok:r.ok,data:d}}
+function nav(p){currentPage=p;document.querySelectorAll('.nav-item').forEach(function(el,i){el.classList.toggle('active',navPages[i]===p)});renderPage(p);document.querySelector('.content').scrollTop=0}
+function renderPage(p){var c=document.getElementById('appContent');if(!token&&p!=='landing'){p='landing';currentPage='home'}var pages={'landing':landingHTML,'home':homeHTML,'market':marketHTML,'trade':tradeHTML,'companies':companiesHTML,'allcompanies':allCompaniesHTML,'social':socialHTML,'profile':profileHTML};c.innerHTML=(pages[p]||landingHTML)();if(p==='home')loadTicker();if(p==='market')loadMarket();if(p==='companies'&&token)loadMyCompanies();if(p==='allcompanies'&&token)loadAllCompanies();if(p==='social')loadComments()}
+function landingHTML(){return '<div class="page"><div class="hero"><h1 class="hero-title">Market<br>Mogul</h1><p style="color:#888;margin:15px 0">Build Your Empire. Trade Like a Pro.</p><button class="btn btn-primary" onclick="showRegister()">Create Account</button><button class="btn btn-glass" onclick="showLogin()">Sign In</button></div></div>'}
+function showRegister(){document.getElementById('appContent').innerHTML='<div class="page" style="padding-top:30px"><div class="card"><h2 style="text-align:center">Create Account</h2><input class="input" id="regUser" placeholder="Username"><input class="input" id="regEmail" placeholder="Email" type="email"><input class="input" id="regPass" placeholder="Password" type="password"><button class="btn btn-primary" onclick="doRegister()">Create Free Account</button><p style="text-align:center;margin-top:15px;color:#888;font-size:13px">Have an account? <a style="color:#6c5ce7;cursor:pointer" onclick="showLogin()">Sign In</a></p></div></div>'}
+function showLogin(){document.getElementById('appContent').innerHTML='<div class="page" style="padding-top:30px"><div class="card"><h2 style="text-align:center">Welcome Back</h2><input class="input" id="loginEmail" placeholder="Email" type="email"><input class="input" id="loginPass" placeholder="Password" type="password"><button class="btn btn-primary" onclick="doLogin()">Sign In</button><p style="text-align:center;margin-top:15px;color:#888;font-size:13px">New player? <a style="color:#6c5ce7;cursor:pointer" onclick="showRegister()">Create Account</a></p></div></div>'}
+async function doRegister(){var r=await api('POST','/auth/register',{username:document.getElementById('regUser').value,email:document.getElementById('regEmail').value,password:document.getElementById('regPass').value});if(r.ok){toast('Account created!','success');confetti();showLogin()}else toast(r.data.detail||'Error','error')}
+async function doLogin(){var r=await api('POST','/auth/login',{email:document.getElementById('loginEmail').value,password:document.getElementById('loginPass').value});if(r.ok&&r.data.access_token){token=r.data.access_token;localStorage.setItem('mm_token',token);toast('Welcome!','success');confetti();connectWS();nav('home')}else toast('Invalid credentials','error')}
+function homeHTML(){return '<div class="page"><div class="balance-badge"><small style="color:#888">AVAILABLE BALANCE</small><span class="balance-amount">$100,000</span></div><div class="grid2"><div class="grid-item" onclick="nav(\'market\')"><span class="grid-icon">📊</span>Market</div><div class="grid-item" onclick="nav(\'trade\')"><span class="grid-icon">💹</span>Trade</div><div class="grid-item" onclick="nav(\'companies\')"><span class="grid-icon">🏢</span>My Companies</div><div class="grid-item" onclick="nav(\'allcompanies\')"><span class="grid-icon">🌐</span>All Companies</div></div><div class="ticker-bar" id="homeTicker"><span style="color:#888">Loading prices...</span></div><button class="btn btn-gold" onclick="dailyReward()">🎁 Claim Daily Bonus</button></div>'}
+function updateTicker(){var el=document.getElementById('homeTicker');if(!el||!livePrices.length)return;el.innerHTML=livePrices.map(function(p){return '<span class="ticker-item"><strong>'+p.ticker+'</strong> <span class="green">$'+p.price+'</span></span>'}).join('')}
+function marketHTML(){return '<div class="page"><div class="page-header"><h2>📊 Live Market</h2></div><div id="marketPrices"><span style="color:#888">Loading...</span></div></div>'}
+function updateMarketPrices(){var el=document.getElementById('marketPrices');if(!el)return;el.innerHTML=livePrices.map(function(p){return '<div class="card" style="display:flex;justify-content:space-between"><div><strong>'+p.ticker+'</strong><br><small style="color:#888">'+p.name+' (ID:#'+p.id+')</small></div><div style="font-size:20px;font-weight:700;color:#00b894">$'+p.price+'</div></div>'}).join('')||'<span style="color:#888">No public companies yet</span>'}
+function tradeHTML(){return '<div class="page"><div class="page-header"><h2>💹 Trade</h2></div><div class="card"><input class="input" id="tradeCompId" placeholder="Company ID" type="number"><select class="input" id="tradeType"><option value="BUY">🟢 BUY</option><option value="SELL">🔴 SELL</option></select><input class="input" id="tradeShares" placeholder="Shares" type="number"><input class="input" id="tradePrice" placeholder="Price per share" type="number"><button class="btn btn-primary" onclick="placeTrade()">Submit Order</button></div></div>'}
+async function placeTrade(){var r=await api('POST','/stocks/order',{company_id:parseInt(document.getElementById('tradeCompId').value),order_type:document.getElementById('tradeType').value,shares:parseInt(document.getElementById('tradeShares').value),price_per_share:parseFloat(document.getElementById('tradePrice').value)});if(r.ok){toast('Order placed!','success');confetti()}else toast(r.data.detail||'Error','error')}
+function companiesHTML(){return '<div class="page"><div class="page-header"><h2>🏢 My Companies</h2><button class="btn btn-primary" style="width:auto;padding:8px 14px;font-size:12px" onclick="showCreateCompany()">+ New</button></div><div id="myCompaniesList"><span style="color:#888">Loading...</span></div></div>'}
+function allCompaniesHTML(){return '<div class="page"><div class="page-header"><h2>🌐 All Companies</h2></div><div id="allCompaniesList"><span style="color:#888">Loading...</span></div></div>'}
+async function loadAllCompanies(){var r=await api('GET','/companies/all');var el=document.getElementById('allCompaniesList');if(r.ok&&r.data.length>0){el.innerHTML=r.data.map(function(c){return '<div class="company-card"><div class="company-header"><div><strong>'+c.name+'</strong> <span style="color:#6c5ce7">'+c.ticker+'</span></div><span class="company-id-badge">ID:#'+c.id+'</span></div><div style="font-size:12px;color:#888">'+c.sector+' | $'+(c.cash||0).toLocaleString()+' | Share:$'+(c.share_price||0).toFixed(2)+' | '+(c.is_public?'Public':'Private')+'</div></div>'}).join('')}else{el.innerHTML='<div class="card" style="text-align:center"><p style="color:#888">No companies yet</p></div>'}}
+function showCreateCompany(){document.getElementById('appContent').innerHTML='<div class="page"><div class="card"><h2>Create Company</h2><input class="input" id="compName" placeholder="Company Name"><input class="input" id="compTicker" placeholder="Ticker (4 letters)" maxlength="5"><select class="input" id="compSector"><option value="tech">Tech</option><option value="food">Food</option><option value="energy">Energy</option><option value="finance">Finance</option></select><button class="btn btn-primary" onclick="createCompany()">Create ($50,000)</button><button class="btn btn-glass" onclick="nav(\'companies\')">Back</button></div></div>'}
+async function createCompany(){var r=await api('POST','/companies/create',{name:document.getElementById('compName').value,ticker:document.getElementById('compTicker').value,sector:document.getElementById('compSector').value});if(r.ok){toast('Company created!','success');confetti();nav('companies')}else toast(r.data.detail||'Error','error')}
+async function loadMyCompanies(){var r=await api('GET','/companies/my');var el=document.getElementById('myCompaniesList');if(r.ok&&r.data.length>0){el.innerHTML=r.data.map(function(c){return '<div class="company-card"><div class="company-header"><div><strong>'+c.name+'</strong> <span style="color:#6c5ce7">'+c.ticker+'</span></div><span class="company-id-badge">ID:#'+c.id+'</span></div><div style="font-size:12px;color:#888">'+c.sector+' | $'+c.cash.toLocaleString()+' | '+(c.is_public?'Public':'Private')+'</div><div class="action-btns"><button class="btn btn-primary" onclick="showAddProduct('+c.id+',\''+c.name+'\')">Add Product</button><button class="btn btn-success" onclick="showProduce('+c.id+',\''+c.name+'\')">Produce</button><button class="btn btn-gold" onclick="showSell('+c.id+',\''+c.name+'\')">Sell</button>'+(c.is_public?'':'<button class="btn" style="background:#a855f7;color:#fff" onclick="showIPOForm('+c.id+',\''+c.name+'\')">IPO</button>')+'</div></div>'}).join('')}else{el.innerHTML='<div class="card" style="text-align:center"><p style="color:#888">No companies yet</p><button class="btn btn-primary" onclick="showCreateCompany()">Create First Company</button></div>'}}
+function showAddProduct(id,name){document.getElementById('appContent').innerHTML='<div class="page"><div class="card"><h2>Add Product</h2><p style="color:#888">Company: <strong>'+name+' (ID:#'+id+')</strong></p><input class="input" id="prodName" placeholder="Product Name"><input class="input" id="prodCost" placeholder="Cost" type="number"><input class="input" id="prodPrice" placeholder="Price" type="number"><button class="btn btn-primary" onclick="addProduct('+id+')">Add</button><button class="btn btn-glass" onclick="nav(\'companies\')">Back</button></div></div>'}
+async function addProduct(id){var r=await api('POST','/products/create?company_id='+id,{name:document.getElementById('prodName').value,production_cost:parseFloat(document.getElementById('prodCost').value),selling_price:parseFloat(document.getElementById('prodPrice').value)});if(r.ok){toast('Product added!','success');confetti();nav('companies')}else toast(r.data.detail||'Error','error')}
+function showProduce(id,name){document.getElementById('appContent').innerHTML='<div class="page"><div class="card"><h2>Produce</h2><p style="color:#888">Company: <strong>'+name+' (ID:#'+id+')</strong></p><input class="input" id="prodId" placeholder="Product ID" type="number"><input class="input" id="prodQty" placeholder="Quantity" type="number"><button class="btn btn-success" onclick="produce()">Produce</button><button class="btn btn-glass" onclick="nav(\'companies\')">Back</button></div></div>'}
+async function produce(){var r=await api('POST','/products/produce',{product_id:parseInt(document.getElementById('prodId').value),quantity:parseInt(document.getElementById('prodQty').value)});if(r.ok){toast('Production complete!','success');confetti();nav('companies')}else toast(r.data.detail||'Error','error')}
+function showSell(id,name){document.getElementById('appContent').innerHTML='<div class="page"><div class="card"><h2>Sell</h2><p style="color:#888">Company: <strong>'+name+' (ID:#'+id+')</strong></p><input class="input" id="sellProdId" placeholder="Product ID" type="number"><input class="input" id="sellQty" placeholder="Quantity" type="number"><button class="btn btn-gold" onclick="sellProduct()">Sell</button><button class="btn btn-glass" onclick="nav(\'companies\')">Back</button></div></div>'}
+async function sellProduct(){var r=await api('POST','/market/sell-product',{product_id:parseInt(document.getElementById('sellProdId').value),quantity:parseInt(document.getElementById('sellQty').value)});if(r.ok){toast('Sold!','success');confetti();nav('companies')}else toast(r.data.detail||'Error','error')}
+function showIPOForm(id,name){document.getElementById('appContent').innerHTML='<div class="page"><div class="card"><h2>Launch IPO</h2><p style="color:#888">Company: <strong>'+name+' (ID:#'+id+')</strong></p><input class="input" id="ipoShares" placeholder="Total Shares" type="number"><input class="input" id="ipoPrice" placeholder="Initial Price" type="number"><button class="btn btn-gold" onclick="doIPOFromCompany('+id+')">Go Public!</button><button class="btn btn-glass" onclick="nav(\'companies\')">Back</button></div></div>'}
+async function doIPOFromCompany(id){var r=await api('POST','/stocks/ipo',{company_id:id,shares_to_issue:parseInt(document.getElementById('ipoShares').value),initial_price:parseFloat(document.getElementById('ipoPrice').value)});if(r.ok){toast('Public!','success');confetti();nav('companies')}else toast(r.data.detail||'Error','error')}
+function socialHTML(){return '<div class="page"><div class="page-header"><h2>💬 Chat</h2></div><input class="input" id="chatCompId" placeholder="Company ID" type="number"><textarea class="input" id="chatMsg" placeholder="Write..." rows="2"></textarea><button class="btn btn-primary" onclick="postComment()">Post</button><div id="commentsList"></div></div>'}
+async function postComment(){var cid=document.getElementById('chatCompId').value;var r=await api('POST','/comments/company/'+cid,{content:document.getElementById('chatMsg').value});if(r.ok){document.getElementById('chatMsg').value='';loadComments();toast('Posted!','success')}}
+async function loadComments(){var cid=document.getElementById('chatCompId')?document.getElementById('chatCompId').value:'1';var r=await api('GET','/comments/company/'+cid);var el=document.getElementById('commentsList');if(el&&Array.isArray(r.data)){el.innerHTML=r.data.map(function(c){return '<div class="comment-item"><strong style="color:#6c5ce7">'+c.username+'</strong><br>'+c.content+'</div>'}).join('')}}
+function profileHTML(){return '<div class="page"><div class="page-header"><h2>👤 Profile</h2></div><div class="card"><p>Balance: <strong style="color:#00b894">$100,000</strong></p></div><button class="btn btn-primary" onclick="getPortfolio()">💼 Portfolio</button><div id="portfolioData"></div><button class="btn btn-glass" onclick="getLeaderboard()">🏆 Leaderboard</button><div id="lbData"></div><button class="btn btn-danger" style="margin-top:20px" onclick="logout()">🚪 Logout</button></div>'}
+async function getPortfolio(){var r=await api('GET','/stocks/portfolio');var el=document.getElementById('portfolioData');if(r.ok&&Array.isArray(r.data)){el.innerHTML=r.data.map(function(p){return '<div class="card">'+p.ticker+' - '+p.shares_owned+' shares @ $'+p.current_price+'</div>'}).join('')}}
+async function getLeaderboard(){var r=await api('GET','/leaderboard');var el=document.getElementById('lbData');if(r.ok&&Array.isArray(r.data)){el.innerHTML=r.data.slice(0,5).map(function(p,i){var m=i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);return '<div class="card">'+m+' '+p.username+' - $'+p.net_worth.toLocaleString()+'</div>'}).join('')}}
+function loadMarket(){updateMarketPrices()}
+function loadTicker(){updateTicker()}
+function loadProfile(){}
+async function dailyReward(){var r=await api('POST','/rewards/daily-login');if(r.ok){toast(r.data.message,'success');confetti()}else toast('Already claimed','error')}
+function logout(){token='';localStorage.removeItem('mm_token');if(ws)ws.close();nav('landing');toast('Logged out','info')}
+if(token){connectWS();nav('home')}else{nav('landing')}
+</script>
 </body>
 </html>
