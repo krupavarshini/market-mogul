@@ -27,7 +27,7 @@ class StockOrder(Base):
     shares = Column(Integer, nullable=False)
     price_per_share = Column(Float, nullable=False)
     status = Column(String(10), default="OPEN")
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
 
 class Trade(Base):
@@ -40,7 +40,7 @@ class Trade(Base):
     shares = Column(Integer, nullable=False)
     price_per_share = Column(Float, nullable=False)
     total_amount = Column(Float, nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
 
 class WorldEvent(Base):
@@ -51,4 +51,4 @@ class WorldEvent(Base):
     description = Column(String(500), nullable=False)
     sector_affected = Column(String(20), nullable=True)
     price_impact = Column(Float, nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))

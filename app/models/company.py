@@ -17,7 +17,7 @@ class Company(Base):
     total_shares = Column(Integer, default=1000)
     share_price = Column(Float, default=10.0)
     is_public = Column(Integer, default=0)
-    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc))
 
     owner = relationship("User", back_populates="companies")
     comments = relationship("Comment", back_populates="company")
