@@ -4,17 +4,23 @@ from sqlalchemy.orm import DeclarativeBase
 from app.core.config import settings
 import os
 
-# Get database URL from environment
+# Get database URL
 database_url = os.environ.get("DATABASE_URL", settings.DATABASE_URL)
 
-# Fix the URL format
-if database_url and database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql://", 1)
+# Print it to see what we're getting
+print(f"ORIGINAL URL: {database_url}")
 
-if database_url and "postgresql" in database_url and "+asyncpg" not in database_url:
+# Force correct URL format
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql+asyncpg://", 1)
+elif database_url.startswith("postgresql://"):
     database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+elif "postgresql" in database_url and "asyncpg" not in database_url:
+    database_url = database_url.replace("postgresql", "postgresql+asyncpg", 1)
+elif "popostgresql" in database_url:
+    database_url = database_url.replace("popostgresql", "postgresql+asyncpg", 1)
 
-print(f"DATABASE_URL: {database_url[:50]}...")
+print(f"FINAL URL: {database_url}")
 
 engine = create_async_engine(database_url, echo=False)
 async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
