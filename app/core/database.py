@@ -6,21 +6,17 @@ import os
 
 # Get database URL from environment
 database_url = os.environ.get("DATABASE_URL", settings.DATABASE_URL)
-print(f"Using database URL: {database_url[:30]}...")  # Debug print
 
-# Convert postgres:// to postgresql://
-if database_url.startswith("postgres://"):
+# Fix the URL format
+if database_url and database_url.startswith("postgres://"):
     database_url = database_url.replace("postgres://", "postgresql://", 1)
 
-# Add asyncpg driver
-if database_url.startswith("postgresql://"):
+if database_url and "postgresql" in database_url and "+asyncpg" not in database_url:
     database_url = database_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-elif database_url.startswith("postgresql+asyncpg://"):
-    pass  # Already correct
 
-print(f"Final database URL: {database_url[:40]}...")  # Debug print
+print(f"DATABASE_URL: {database_url[:50]}...")
 
-engine = create_async_engine(database_url, echo=True)
+engine = create_async_engine(database_url, echo=False)
 async_session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 class Base(DeclarativeBase):
